@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+   <title>Pete's Pet Shop</title>
+
+
+   <!-- Bootstrap -->
+   <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+   <!--[if lt IE 9]>
+     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+   <![endif]-->
+ </head>
+ <body>
+   <div class="container" style="width: 650px;">
+     <div class="row">
+         <div class="col-lg-12">
+             <h1 class="text-center">Patient List</h1>
+             <hr />
+             <br />
+             <div id="loader">
+                 <p id="loader-msg" class="text-center">Loading...</p>
+             </div>
+             <div id="content" style="display: none;">
+                 <table class="table">
+                     <thead>
+                         <tr>
+                             <th scope="col">ID</th>
+                             <th scope="col">Name</th>
+                             <th scope="col">Age</th>
+
+                         </tr>
+                     </thead>
+                     <tbody id="patientsResults">
+                       <tr><th>" + id + "</th><td>" + name + "</td><td>" + age + "</td></tr>
+                     </tbody>
+                 </table>
+                 <hr />
+                 <p id="accountAddress" class="text-center">
+
+
+                 </p>
+             </div>
+         </div>
+     </div>
+ </div>
+
+
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+   <form onsubmit="App.castVote(); return false;" class="text-center">
+  <div class="form-group">
+  <button type="submit">Make this account an admin</button>
+  <hr />
+</form>
+
+<form onsubmit="App.addPatient(); return false;" class="text-center">
+  <div class="form-group">
+    <div class="form-group">
+    <label for="nameInput">Name</label>
+    <input type="text" class="form-control" id="nameInput" required>
+  </div>
+    <label for="ageInput">Age</label>
+    <input type="number" class="form-control" id="ageInput" required>
+  </div>
+  <div class="form-group">
+    <label for="genderInput">Gender</label>
+    <input type="text" class="form-control" id="genderInput" required>
+  </div>
+  <div class="form-group">
+    <label for="vaccineStatusInput">Vaccine Status</label>
+    <input type="text" class="form-control" id="vaccineStatusInput" required>
+  </div>
+  <div class="form-group">
+    <label for="districtInput">District</label>
+    <input type="text" class="form-control" id="districtInput" required>
+  </div>
+  <div class="form-group">
+    <label for="symptomsInput">Symptoms Details</label>
+    <input type="text" class="form-control" id="symptomsInput" required>
+  </div>
+  <div class="form-group">
+    <label for="isDeadInput">Is Dead</label>
+    <select class="form-control" id="isDeadInput" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Add Patient</button>
+  <hr />
+</form>
+
+
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <!-- Include all compiled plugins (below), or include individual files as needed -->
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/web3.min.js"></script>
+   <script src="js/truffle-contract.js"></script>
+   <script src="js/app.js"></script>
+ </body>
+</html>
