@@ -38,21 +38,30 @@ contract PatientManagement {
     uint public patientsCount=0;
     
     // Structure to hold district-wise patient statistics
-    struct DistrictStats {
-        uint totalPatients;
-        uint totalDeaths;
-        uint totalAge;
-        uint childCount;
-        uint teenCount;
-        uint youthCount;
-        uint elderCount;
-    }
+struct DistrictStats {
+    uint totalPatients;
+    uint totalDeaths;
+    uint totalAge;
+    uint childCount;
+    uint teenCount;
+    uint youthCount;
+    uint elderCount;
+    uint childPercent;
+    uint teenPercent;
+    uint youthPercent;
+    uint elderPercent;
+}
 
     // Mapping to store district-wise statistics
     mapping(string => DistrictStats) public districtStats;
-
     // Function to update Covid trend statistics
     function updateCovidTrend(uint _id, uint _age, string memory _district, bool _is_dead, bool isAddition) internal {
+        // Check if the district statistics already exist, if not, initialize them
+        if (districtStats[_district].totalPatients == 0) {
+            districtStats[_district] = DistrictStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+
+        // Get a reference to the district statistics
         DistrictStats storage stats = districtStats[_district];
         
         // Increment or decrement totalPatients
@@ -81,7 +90,16 @@ contract PatientManagement {
         } else {
             stats.elderCount++;
         }
+
+        // Calculate percentage of age groups
+        uint totalPatients = stats.totalPatients;
+        stats.childPercent = (stats.childCount * 100) / totalPatients;
+        stats.teenPercent = (stats.teenCount * 100) / totalPatients;
+        stats.youthPercent = (stats.youthCount * 100) / totalPatients;
+        stats.elderPercent = (stats.elderCount * 100) / totalPatients;
     }
+
+
    
     // Mapping to store death count for each district
     mapping(string => uint) public districtDeathCounts;
@@ -215,52 +233,87 @@ contract PatientManagement {
         }
     }
 
-    // Function to get Covid trend statistics
     function getCovidTrend() public view returns (uint, string memory, uint, uint, uint, uint, uint) {
-        uint totalPatients;
-        uint totalDeaths;
-        uint medianAge;
-        uint childPercent;
-        uint teenPercent;
-        uint youthPercent;
-        uint elderPercent;
+    uint totalDeaths;
+    uint medianAge;
+    uint childPercent;
+    uint teenPercent;
+    uint youthPercent;
+    uint elderPercent;
+    string memory districtWithHighestDeathCount;
 
-
-        // Calculate combined totalPatients and totalDeaths across all districts
-        for (uint i = 1; i <= patientsCount; i++) {
-            totalPatients++;
-            if (patients[i].is_dead) {
-                totalDeaths++;
-            }
+    // Calculate total deaths
+    for (uint i = 1; i <= patientsCount; i++) {
+        if (patients[i].is_dead) {
+            totalDeaths++;
         }
-
-        // Calculate median age
-        uint[] memory ages = new uint[](totalPatients);
-        uint idx = 0;
-        for (uint i = 1; i <= patientsCount; i++) {
-            ages[idx] = patients[i].age;
-            idx++;
-        }
-        medianAge = calculateMedian(ages);
-
-        // Calculate percentage of age groups
-        childPercent = (districtStats["Total"].childCount * 100) / totalPatients;
-        teenPercent = (districtStats["Total"].teenCount * 100) / totalPatients;
-        youthPercent = (districtStats["Total"].youthCount * 100) / totalPatients;
-        elderPercent = (districtStats["Total"].elderCount * 100) / totalPatients;
-
-        return (totalDeaths, "Total", medianAge, childPercent, teenPercent, youthPercent, elderPercent);
     }
 
-    // Function to calculate median
-    function calculateMedian(uint[] memory values) internal pure returns (uint) {
-        uint n = values.length;
-        require(n > 0, "Empty array");
-        if (n % 2 == 0) {
-            return (values[n / 2 - 1] + values[n / 2]) / 2;
+    // Find district with highest death count
+    uint highestDeathCount = 0;
+    for (uint j = 0; j < districts.length; j++) {
+        uint deathCount = districtDeathCounts[districts[j]];
+        if (deathCount > highestDeathCount) {
+            highestDeathCount = deathCount;
+            districtWithHighestDeathCount = districts[j];
+        }
+    }
+
+    // Calculate median age
+    uint[] memory ages = new uint[](patientsCount);
+    for (uint k = 1; k <= patientsCount; k++) {
+        ages[k - 1] = patients[k].age;
+    }
+    medianAge = calculateMedian(ages);
+
+    // Calculate age group percentages for all patients
+    (childPercent, teenPercent, youthPercent, elderPercent) = calculateAgeGroupPercentages();
+
+    return (totalDeaths, districtWithHighestDeathCount, medianAge, childPercent, teenPercent, youthPercent, elderPercent);
+}
+
+
+
+function calculateAgeGroupPercentages() internal view returns (uint, uint, uint, uint) {
+    uint childCount;
+    uint teenCount;
+    uint youthCount;
+    uint elderCount;
+
+    // Count patients in each age group
+    for (uint i = 1; i <= patientsCount; i++) {
+        uint age = patients[i].age;
+        if (age < 13) {
+            childCount++;
+        } else if (age < 20) {
+            teenCount++;
+        } else if (age < 50) {
+            youthCount++;
         } else {
-            return values[n / 2];
+            elderCount++;
         }
     }
+
+    // Calculate percentages
+    uint totalPatients = patientsCount;
+    uint childPercent = (childCount * 100) / totalPatients;
+    uint teenPercent = (teenCount * 100) / totalPatients;
+    uint youthPercent = (youthCount * 100) / totalPatients;
+    uint elderPercent = (elderCount * 100) / totalPatients;
+
+    return (childPercent, teenPercent, youthPercent, elderPercent);
+}
+
+// Function to calculate median
+function calculateMedian(uint[] memory values) internal pure returns (uint) {
+    uint n = values.length;
+    require(n > 0, "Empty array");
+    if (n % 2 == 0) {
+        return (values[n / 2 - 1] + values[n / 2]) / 2;
+    } else {
+        return values[n / 2];
+    }
+}
+
 
 }

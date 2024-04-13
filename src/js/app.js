@@ -163,6 +163,7 @@ for (let i = 1; i <= patientsCount; i++) {
        App.contracts.PatientManagement.deployed().then(function(instance) {
         return instance.getCovidTrend();
     }).then(function(result) {
+      console.log(result)
         $("#covidTrendResults").html(
             "<tr><td>" + result[1] + "</td><td>" + result[0] + "</td><td>" + result[2] + "</td><td>" + result[3] + "</td><td>" + result[4] + "</td><td>" + result[5] + "</td><td>" + result[6] + "</td></tr>"
         );
