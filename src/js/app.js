@@ -95,19 +95,49 @@ render: async function(){
      var patientsSelect = $("#patientsSelect");
      patientsSelect.empty();
 
+     
 
-     for (let i = 1; i <= patientsCount; i++) {
-       PatientManagementInstance.patients( i )
-       .then( function( patient ){
-         var id = patient[0];
-         var name = patient[1];
-         var age= patient[2];
-         var vaccine_status= patient[4];
-         var death= patient[7];
-        
-         // render results
-         var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age+ "</td><td>" + vaccine_status+ "</td><td>" + death+ "</td></tr>"
-         patientsResults.append( patientTemplate );
+
+ // Define the showAlert function
+function showAlert() {
+  alert("Vaccine Certificate Downloaded!");
+}
+
+// Loop through patients
+for (let i = 1; i <= patientsCount; i++) {
+  PatientManagementInstance.patients(i)
+      .then(function(patient) {
+          console.log(patient);
+          var id = patient[0];
+          var name = patient[1];
+          var age = patient[2];
+          var vaccine_status = patient[4];
+          var death = patient[7];
+          var district = patient[5];
+          var isDoubleDosed = patient[8]; // Assuming this indicates whether the patient is double dosed or not
+
+          // Check if the patient is double dosed
+          var btn = "";
+          if (isDoubleDosed == true) {
+              btn = "<button class='btn btn-primary' data-id='" + id + "'>Certificate</button>";
+          }
+
+          // Create a button element
+          var button = $(btn);
+
+          // Attach click event listener to the button
+          button.on('click', function() {
+              showAlert();
+          });
+
+          // Create table row and append it to the table body
+          var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age + "</td><td>" + district + "</td><td>" + vaccine_status + "</td><td>" + death + "</td><td></td></tr>";
+          var tableRow = $(patientTemplate);
+          tableRow.find('td').last().append(button);
+          patientsResults.append(tableRow);
+      
+      
+    
 
 
          //render balloot option
@@ -139,14 +169,41 @@ render: async function(){
     }).catch(function(err) {
         console.error(err);
     });
+
+
+    
+    
+
+// Fetch district death counts
+App.contracts.PatientManagement.deployed()
+.then(function(instance) {
+    return instance.getDistrictDeathCounts();
+})
+.then(function(result) {
+    // Extract district names and death counts from the result
+    console.log(result);
+   
+    var districts = result[0];
+    var deathCounts = result[1];
+    console.log(districts );
+    console.log(deathCounts);
+    // Update the UI with the district names and death counts
+    var districtsList = document.getElementById("districtsList");
+    for (var i = 0; i < districts.length; i++) {
+        var listItem = document.createElement("li");
+        listItem.textContent = districts[i] + ": " + deathCounts[i];
+        districtsList.appendChild(listItem);
+    }
+})
+.catch(function(error) {
+    console.error("Error fetching district death counts:", error);
+});
+
+
+  
  },
 
-// ... [existing code]
 
-// Fetch and display Covid Trend Table data
-
-
-// ... [existing code]
 
  // casting vote
  castVote: function(){
