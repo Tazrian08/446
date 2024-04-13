@@ -52,5 +52,22 @@ contract PatientManagement {
        // record voters vote
        admins[msg.sender] = true;
    }
+   
+     modifier senderIsAdmin {
+    require(admins[msg.sender] == true, "Sender is not a doctor");
+    _;
+  }
+  
+     function updateVaccine(uint _id, string memory _vaccine_status) public senderIsAdmin {
+   
+       patients[_id].vaccine_status = _vaccine_status;
+       
+   }
+        function updateDeath(uint _id, bool _is_dead) public senderIsAdmin {
+   
+       patients[_id].is_dead = _is_dead;
+       
+   }
+
 }
 

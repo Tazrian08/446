@@ -36,11 +36,12 @@
                              <th scope="col">ID</th>
                              <th scope="col">Name</th>
                              <th scope="col">Age</th>
+                             <th scope="col">Vaccine Status</th>
 
                          </tr>
                      </thead>
                      <tbody id="patientsResults">
-                       <tr><th>" + id + "</th><td>" + name + "</td><td>" + age + "</td></tr>
+                       <tr><th>" + id + "</th><td>" + name + "</td><td>" + age + "</td><td>" + vaccine_status + "</td></tr>
                      </tbody>
                  </table>
                  <hr />
@@ -96,6 +97,41 @@
   <button type="submit" class="btn btn-primary">Add Patient</button>
   <hr />
 </form>
+
+
+
+
+<!-- Update Vaccine Status Form -->
+<form onsubmit="App.updateVaccine(); return false;" class="text-center">
+  <div class="form-group">
+    <label for="updateVaccineId">Patient ID</label>
+    <input type="number" class="form-control" id="updateVaccineId" required>
+  </div>
+  <div class="form-group">
+    <label for="updateVaccineStatus">New Vaccine Status</label>
+    <input type="text" class="form-control" id="updateVaccineStatus" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Update Vaccine Status</button>
+  <hr />
+</form>
+
+<!-- Update Death Status Form -->
+<form onsubmit="App.updateDeath(); return false;" class="text-center">
+  <div class="form-group">
+    <label for="updateDeathId">Patient ID</label>
+    <input type="number" class="form-control" id="updateDeathId" required>
+  </div>
+  <div class="form-group">
+    <label for="updateDeathStatus">Is Dead</label>
+    <select class="form-control" id="updateDeathStatus" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Update Death Status</button>
+  <hr />
+</form>
+
 
 
 

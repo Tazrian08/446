@@ -100,11 +100,12 @@ render: async function(){
        PatientManagementInstance.patients( i )
        .then( function( patient ){
          var id = patient[0];
-         var gender = patient[1];
-         var vaccine_status= patient[2];
+         var name = patient[1];
+         var age= patient[2];
+         var vaccine_status= patient[4];
         
          // render results
-         var patientTemplate = "<tr><th>" + id + "</th><td>" + gender + "</td><td>" + vaccine_status+ "</td></tr>"
+         var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age+ "</td><td>" + vaccine_status+ "</td></tr>"
          patientsResults.append( patientTemplate );
 
 
@@ -173,6 +174,41 @@ render: async function(){
   });
   
 },
+
+updateVaccine: function() {
+  let id = $("#updateVaccineId").val();
+  let newVaccineStatus = $("#updateVaccineStatus").val();
+
+  App.contracts.PatientManagement.deployed()
+  .then(function(instance) {
+    return instance.updateVaccine(id, newVaccineStatus, { from: App.account[0] });
+  })
+  .then(function(result) {
+    console.log("Vaccine status updated successfully:", result);
+    App.render();
+  })
+  .catch(function(error) {
+    console.error("Error updating vaccine status:", error);
+  });
+},
+
+updateDeath: function() {
+  let id = $("#updateDeathId").val();
+  let isDead = $("#updateDeathStatus").val() === "true";
+
+  App.contracts.PatientManagement.deployed()
+  .then(function(instance) {
+    return instance.updateDeath(id, isDead, { from: App.account[0] });
+  })
+  .then(function(result) {
+    console.log("Death status updated successfully:", result);
+    App.render();
+  })
+  .catch(function(error) {
+    console.error("Error updating death status:", error);
+  });
+},
+
 
  // voted event
  listenForEvents: function(){
