@@ -129,8 +129,24 @@ render: async function(){
    .catch( function( error ){
      console.warn( error )
    });
+   
+       App.contracts.PatientManagement.deployed().then(function(instance) {
+        return instance.getCovidTrend();
+    }).then(function(result) {
+        $("#covidTrendResults").html(
+            "<tr><td>" + result[1] + "</td><td>" + result[0] + "</td><td>" + result[2] + "</td><td>" + result[3] + "</td><td>" + result[4] + "</td><td>" + result[5] + "</td><td>" + result[6] + "</td></tr>"
+        );
+    }).catch(function(err) {
+        console.error(err);
+    });
  },
 
+// ... [existing code]
+
+// Fetch and display Covid Trend Table data
+
+
+// ... [existing code]
 
  // casting vote
  castVote: function(){
@@ -209,6 +225,8 @@ updateDeath: function() {
   .catch(function(error) {
     console.error("Error updating death status:", error);
   });
+  
+  
 },
 
 
