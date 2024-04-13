@@ -37,6 +37,7 @@
                              <th scope="col">Name</th>
                              <th scope="col">Age</th>
                              <th scope="col">Vaccine Status</th>
+                             <th scope="col">Death Status</th>
 
                          </tr>
                      </thead>
@@ -56,13 +57,13 @@
 
 
    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-   <form onsubmit="App.castVote(); return false;" class="text-center">
+   <form onsubmit="App.castVote(); return false;" id="Adminform" class="text-center">
   <div class="form-group">
-  <button type="submit">Make this account an admin</button>
+  <button  type="submit">Make this account an admin</button>
   <hr />
 </form>
 
-<form onsubmit="App.addPatient(); return false;" class="text-center">
+<form onsubmit="App.addPatient(); return false;" id="addPatientform" class="text-center">
   <div class="form-group">
     <div class="form-group">
     <label for="nameInput">Name</label>
@@ -102,7 +103,7 @@
 
 
 <!-- Update Vaccine Status Form -->
-<form onsubmit="App.updateVaccine(); return false;" class="text-center">
+<form onsubmit="App.updateVaccine(); return false;" id="Vaccineform" class="text-center">
   <div class="form-group">
     <label for="updateVaccineId">Patient ID</label>
     <input type="number" class="form-control" id="updateVaccineId" required>
@@ -116,7 +117,7 @@
 </form>
 
 <!-- Update Death Status Form -->
-<form onsubmit="App.updateDeath(); return false;" class="text-center">
+<form onsubmit="App.updateDeath(); return false;" id="DeathForm" class="text-center">
   <div class="form-group">
     <label for="updateDeathId">Patient ID</label>
     <input type="number" class="form-control" id="updateDeathId" required>

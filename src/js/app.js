@@ -103,9 +103,10 @@ render: async function(){
          var name = patient[1];
          var age= patient[2];
          var vaccine_status= patient[4];
+         var death= patient[7];
         
          // render results
-         var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age+ "</td><td>" + vaccine_status+ "</td></tr>"
+         var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age+ "</td><td>" + vaccine_status+ "</td><td>" + death+ "</td></tr>"
          patientsResults.append( patientTemplate );
 
 
@@ -119,7 +120,7 @@ render: async function(){
    .then( function( isAdmin ){
      // don't allow user to vote
      if(isAdmin){
-       $( "form" ).hide()
+     $( "#addPatientform" ).hide()
      }
      loader.hide();
      content.show();
