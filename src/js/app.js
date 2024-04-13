@@ -120,6 +120,7 @@ render: async function(){
    .then( function( isAdmin ){
      // don't allow user to vote
      if(isAdmin){
+     $( "#Adminform" ).hide()
      $( "#addPatientform" ).hide()
      }
      loader.hide();
