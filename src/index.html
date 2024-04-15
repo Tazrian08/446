@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Pete's Pet Shop</title>
+
+
+  
+   <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+  
+ </head>
+ <body>
+   <div class="container" style="width: 650px;">
+     <div class="row">
+         <div class="col-lg-12">
+             <h1 class="text-center">Patient & Admin List</h1>
+             <hr />
+             <br />
+             <div id="loader">
+                 <p id="loader-msg" class="text-center">Loading...</p>
+             </div>
+             <div id="content" style="display: none;">
+                 <table class="table">
+                     <thead>
+                         <tr>
+                             <th scope="col">ID</th>
+                             <th scope="col">Name</th>
+                             <th scope="col">Age</th>
+                             <th scope="col">District</th>
+                             <th scope="col">Vaccine Status</th>
+                             <th scope="col">Death Status</th>
+                             
+                             <th scope="col">Action</th>
+
+                         </tr>
+                        </thead>
+                        <tbody id="patientsResults">
+                            <tr>
+                                <th>" + id + "</th>
+                                <td>" + name + "</td>
+                                <td>" + age + "</td>
+                                <td>" + district + "</td>
+                                <td>" + vaccine_status + "</td>
+                                <td>" + death + "</td>
+                                <td><button class='btn btn-primary'>Button Text</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                 <hr />
+                 <p id="accountAddress" class="text-center">
+
+
+                 </p>
+             </div>
+         </div>
+     </div>
+ </div>
+
+
+<form onsubmit="App.castVote(); return false;" id="Adminform" class="text-center">
+  <div class="form-group">
+    <button type="submit">Make this account an admin</button>
+  </div>
+</form>
+<hr />
+
+<!-- Covid Trend Table -->
+<table class="table">
+  <thead>
+    <h1 class="text-center">Covid Trend Table</h1>
+      <tr>
+        <!-- <tr id="highestDeathRateRow">
+          <td colspan="7">District with Highest Death Rate: <span id="highestDeathRateDistrict"></span></td>
+      </tr> -->
+      <th>District</th>
+          <th>Average Death Rate per day</th>
+          <th>Median Age</th>
+          <th>Children (%)</th>
+          <th>Teenagers (%)</th>
+          <th>Youths (%)</th>
+          <th>Elders (%)</th>
+      </tr>
+  </thead>
+  <tbody id="covidTrendResults">
+  </tbody>
+</table>
+
+<h1 class="text-center"> User Registration Form</h1><br>
+<form onsubmit="App.addPatient(); return false;" id="addPatientform" class="text-center">
+  <div class="form-group">
+    <div class="form-group">
+    <label for="nameInput">Name</label>
+    <input type="text" class="form-control" id="nameInput" required>
+  </div>
+    <label for="ageInput">Age</label>
+    <input type="number" class="form-control" id="ageInput" required>
+  </div>
+  <div class="form-group">
+    <label for="genderInput">Gender</label>
+    <input type="text" class="form-control" id="genderInput" required>
+  </div>
+<!-- <div class="form-group">
+    <label for="vaccineStatusInput">Vaccine Status</label>
+    <input type="text" class="form-control" id="vaccineStatusInput" required>
+  </div>  -->
+ <div class="form-group">
+    <label for="vaccineStatusInput">Vaccine Status</label>
+    <select class="form-control" id="vaccineStatusInput" required>
+      <option value="not_vaccinated">Not_Vaccinated</option>
+      <option value="one_dose">One Dose</option>
+      <option value="two_dose">Two Dose</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    
+    <label for="districtInput">District</label>
+    <input type="text" class="form-control" id="districtInput" required>
+  </div>
+  <div class="form-group">
+    <label for="symptomsInput">Symptoms Details</label>
+    <input type="text" class="form-control" id="symptomsInput" required>
+  </div>
+  <div class="form-group">
+    <label for="isDeadInput">Is Dead</label>
+    <select class="form-control" id="isDeadInput" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Add User</button>
+  <hr />
+</form>
+
+
+
+
+
+<form onsubmit="App.updateVaccine(); return false;" id="Vaccineform" class="text-center">
+  <div class="form-group">
+    <label for="updateVaccineId">Patient ID</label>
+    <input type="number" class="form-control" id="updateVaccineId" required>
+  </div>
+<!--iv class="form-group">
+    <label for="updateVaccineStatus">New Vaccine Status</label>
+    <input type="text" class="form-control" id="updateVaccineStatus" required>
+  </div> -->
+ <div class="form-group">
+    <label for="updateVaccineStatus">New Vaccine Status</label>
+    <select class="form-control" id="updateVaccineStatus" required>
+      <option value="not_vaccinated">Not_Vaccinated</option>
+      <option value="one_dose">One Dose</option>
+      <option value="two_dose">Two Dose</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Update Vaccine Status</button>
+  <hr />
+</form>
+
+
+<form onsubmit="App.updateDeath(); return false;" id="DeathForm" class="text-center">
+  <div class="form-group">
+    <label for="updateDeathId">Patient ID</label>
+    <input type="number" class="form-control" id="updateDeathId" required>
+  </div>
+  <div class="form-group">
+    <label for="updateDeathStatus">Is Dead</label>
+    <select class="form-control" id="updateDeathStatus" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Update Death Status</button>
+  <hr />
+</form>
+
+
+
+
+<!-- <h1>District Death Counts</h1>
+    <ul id="districtsList">
+         Districts and death counts will be dynamically inserted here 
+    </ul> -->
+
+
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <script src="js/web3.min.js"></script>
+   <script src="js/truffle-contract.js"></script>
+   <script src="js/app.js"></script>
+
+   <!-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (!isAdmin) {
+        document.getElementById("Vaccineform").style.display = "none";
+        document.getElementById("DeathForm").style.display = "none";
+      }
+    });
+  </script> -->
+  
+  
+ </body>
+</html>
