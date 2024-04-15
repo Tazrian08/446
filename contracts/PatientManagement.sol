@@ -16,7 +16,6 @@ contract PatientManagement {
         bool is_dead
     );
 
-    // model a candidate
     struct Patient{
         uint id;
         string name;
@@ -37,7 +36,7 @@ contract PatientManagement {
     // store candidates count
     uint public patientsCount=0;
     
-    // Structure to hold district-wise patient statistics
+   
 struct DistrictStats {
     uint totalPatients;
     uint totalDeaths;
@@ -54,17 +53,16 @@ struct DistrictStats {
 
     // Mapping to store district-wise statistics
     mapping(string => DistrictStats) public districtStats;
-    // Function to update Covid trend statistics
+    // update Covid trend statistics
     function updateCovidTrend(uint _id, uint _age, string memory _district, bool _is_dead, bool isAddition) internal {
-        // Check if the district statistics already exist, if not, initialize them
         if (districtStats[_district].totalPatients == 0) {
             districtStats[_district] = DistrictStats(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
-        // Get a reference to the district statistics
+    
         DistrictStats storage stats = districtStats[_district];
         
-        // Increment or decrement totalPatients
+        
         if (isAddition) {
             stats.totalPatients++;
         } else {
@@ -72,7 +70,7 @@ struct DistrictStats {
             stats.totalPatients--;
         }
         
-        // Update totalAge
+       
         stats.totalAge += _age;
 
         // Update death count
@@ -80,7 +78,7 @@ struct DistrictStats {
             stats.totalDeaths++;
         }
 
-        // Update age group counts
+       
         if (_age < 13) {
             stats.childCount++;
         } else if (_age < 20) {
@@ -91,7 +89,7 @@ struct DistrictStats {
             stats.elderCount++;
         }
 
-        // Calculate percentage of age groups
+       
         uint totalPatients = stats.totalPatients;
         stats.childPercent = (stats.childCount * 100) / totalPatients;
         stats.teenPercent = (stats.teenCount * 100) / totalPatients;
@@ -104,7 +102,7 @@ struct DistrictStats {
     // Mapping to store death count for each district
     mapping(string => uint) public districtDeathCounts;
 
-    // Function to update death count for a district
+    // update death count for a district
     function updateDistrictDeathCount(string memory _district, bool _is_dead) internal {
         if (_is_dead) {
             districtDeathCounts[_district]++;
@@ -114,7 +112,6 @@ struct DistrictStats {
     // Array to store all district names
     string[] public districts;
 
-    // Check if a district exists
     function districtExists(string memory _district) internal view returns (bool) {
         for (uint i = 0; i < districts.length; i++) {
             if (keccak256(abi.encodePacked(districts[i])) == keccak256(abi.encodePacked(_district))) {
@@ -139,7 +136,6 @@ struct DistrictStats {
         updateCovidTrend(patientsCount, _age, _district, _is_dead, true);
 
     
-        // Add the district name if it's not already present in the districts array
         if (!districtExists(_district)) {
             districts.push(_district);
         }
@@ -147,7 +143,7 @@ struct DistrictStats {
         emit PatientAdded(patientsCount, _name, _age, _gender, _vaccine_status, _district, _symptoms_details, _is_dead);
     }
 
-   // Function to compare two strings
+   // compare two strings
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
@@ -171,7 +167,6 @@ struct DistrictStats {
     function updateVaccine(uint _id, string memory _vaccine_status) public senderIsAdmin {
     patients[_id].vaccine_status = _vaccine_status;
 
-    // Check if the vaccine status is "Two Dose" and update the isDoubleDosed flag accordingly
     if (keccak256(abi.encodePacked(_vaccine_status)) == keccak256(abi.encodePacked("two_dose"))) {
         patients[_id].isDoubleDosed = true;
     } else {
@@ -187,14 +182,13 @@ struct DistrictStats {
         uint highestDeathCount = 0;
         uint highestDeathCountDistrictsCount = 0;
 
-        // Iterate over all districts to populate the arrays
         for (uint i = 0; i < length; i++) {
             string memory districtName = districts[i];
             uint deathCount = districtDeathCounts[districtName];
             deathCounts[i] = deathCount;
             districtNames[i] = districtName;
 
-            // Check if the death count is higher than the current highest death count
+            
             if (deathCount > highestDeathCount) {
                 highestDeathCount = deathCount;
                 highestDeathCountDistrictsCount = 1;
@@ -203,7 +197,7 @@ struct DistrictStats {
             }
         }
 
-        // Create a new array to store only the districts with the highest death count
+       
         string[] memory districtsWithHighestDeathCount = new string[](highestDeathCountDistrictsCount);
         uint index = 0;
         for (uint j = 0; j < length; j++) {
@@ -242,14 +236,14 @@ struct DistrictStats {
     uint elderPercent;
     string memory districtWithHighestDeathCount;
 
-    // Calculate total deaths
+    // total deaths
     for (uint i = 1; i <= patientsCount; i++) {
         if (patients[i].is_dead) {
             totalDeaths++;
         }
     }
 
-    // Find district with highest death count
+    // district with highest death count
     uint highestDeathCount = 0;
     for (uint j = 0; j < districts.length; j++) {
         uint deathCount = districtDeathCounts[districts[j]];
@@ -266,7 +260,6 @@ struct DistrictStats {
     }
     medianAge = calculateMedian(ages);
 
-    // Calculate age group percentages for all patients
     (childPercent, teenPercent, youthPercent, elderPercent) = calculateAgeGroupPercentages();
 
     return (totalDeaths, districtWithHighestDeathCount, medianAge, childPercent, teenPercent, youthPercent, elderPercent);
@@ -280,7 +273,7 @@ function calculateAgeGroupPercentages() internal view returns (uint, uint, uint,
     uint youthCount;
     uint elderCount;
 
-    // Count patients in each age group
+    //patients in each age group
     for (uint i = 1; i <= patientsCount; i++) {
         uint age = patients[i].age;
         if (age < 13) {
@@ -294,7 +287,6 @@ function calculateAgeGroupPercentages() internal view returns (uint, uint, uint,
         }
     }
 
-    // Calculate percentages
     uint totalPatients = patientsCount;
     uint childPercent = (childCount * 100) / totalPatients;
     uint teenPercent = (teenCount * 100) / totalPatients;
@@ -304,7 +296,7 @@ function calculateAgeGroupPercentages() internal view returns (uint, uint, uint,
     return (childPercent, teenPercent, youthPercent, elderPercent);
 }
 
-// Function to calculate median
+//calculate median
 function calculateMedian(uint[] memory values) internal pure returns (uint) {
     uint n = values.length;
     require(n > 0, "Empty array");

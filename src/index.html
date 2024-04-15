@@ -4,20 +4,14 @@
    <meta charset="utf-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
    <title>Pete's Pet Shop</title>
 
 
-   <!-- Bootstrap -->
+  
    <link href="css/bootstrap.min.css" rel="stylesheet">
 
 
-   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-   <!--[if lt IE 9]>
-     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-   <![endif]-->
+  
  </head>
  <body>
    <div class="container" style="width: 650px;">
@@ -39,7 +33,7 @@
                              <th scope="col">District</th>
                              <th scope="col">Vaccine Status</th>
                              <th scope="col">Death Status</th>
-                             <!-- <th scope="col">Category</th> -->
+                             
                              <th scope="col">Action</th>
 
                          </tr>
@@ -52,7 +46,6 @@
                                 <td>" + district + "</td>
                                 <td>" + vaccine_status + "</td>
                                 <td>" + death + "</td>
-                                <!-- <td>" + admin + "</td> -->
                                 <td><button class='btn btn-primary'>Button Text</button></td>
                             </tr>
                         </tbody>
@@ -68,7 +61,6 @@
  </div>
 
 
-   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <form onsubmit="App.castVote(); return false;" id="Adminform" class="text-center">
   <div class="form-group">
     <button type="submit">Make this account an admin</button>
@@ -76,6 +68,28 @@
 </form>
 <hr />
 
+<!-- Covid Trend Table -->
+<table class="table">
+  <thead>
+    <h1 class="text-center">Covid Trend Table</h1>
+      <tr>
+        <!-- <tr id="highestDeathRateRow">
+          <td colspan="7">District with Highest Death Rate: <span id="highestDeathRateDistrict"></span></td>
+      </tr> -->
+      <th>District</th>
+          <th>Average Death Rate per day</th>
+          <th>Median Age</th>
+          <th>Children (%)</th>
+          <th>Teenagers (%)</th>
+          <th>Youths (%)</th>
+          <th>Elders (%)</th>
+      </tr>
+  </thead>
+  <tbody id="covidTrendResults">
+  </tbody>
+</table>
+
+<h1 class="text-center"> User Registration Form</h1><br>
 <form onsubmit="App.addPatient(); return false;" id="addPatientform" class="text-center">
   <div class="form-group">
     <div class="form-group">
@@ -103,6 +117,7 @@
   </div>
   
   <div class="form-group">
+    
     <label for="districtInput">District</label>
     <input type="text" class="form-control" id="districtInput" required>
   </div>
@@ -124,7 +139,7 @@
 
 
 
-<!-- Update Vaccine Status Form -->
+
 <form onsubmit="App.updateVaccine(); return false;" id="Vaccineform" class="text-center">
   <div class="form-group">
     <label for="updateVaccineId">Patient ID</label>
@@ -146,7 +161,7 @@
   <hr />
 </form>
 
-<!-- Update Death Status Form -->
+
 <form onsubmit="App.updateDeath(); return false;" id="DeathForm" class="text-center">
   <div class="form-group">
     <label for="updateDeathId">Patient ID</label>
@@ -165,26 +180,7 @@
 
 
 
-<!-- Covid Trend Table -->
-<table class="table">
-    <thead>
-        <tr>
-          <!-- <tr id="highestDeathRateRow">
-            <td colspan="7">District with Highest Death Rate: <span id="highestDeathRateDistrict"></span></td>
-        </tr> -->
-        <th>District</th>
-            <th>Average Death Rate per day</th>
-            <th>Median Age</th>
-            <th>Children (%)</th>
-            <th>Teenagers (%)</th>
-            <th>Youths (%)</th>
-            <th>Elders (%)</th>
-        </tr>
-    </thead>
-    <tbody id="covidTrendResults">
-        <!-- Data will be populated here -->
-    </tbody>
-</table>
+
 <!-- <h1>District Death Counts</h1>
     <ul id="districtsList">
          Districts and death counts will be dynamically inserted here 
@@ -193,18 +189,14 @@
 
 
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-   <!-- Include all compiled plugins (below), or include individual files as needed -->
    <script src="js/bootstrap.min.js"></script>
    <script src="js/web3.min.js"></script>
    <script src="js/truffle-contract.js"></script>
    <script src="js/app.js"></script>
 
    <!-- <script>
-    // Wait for the DOM to be fully loaded before executing the script
     document.addEventListener("DOMContentLoaded", function() {
-      // Check if the user is an admin
       if (!isAdmin) {
-        // Hide the update vaccine and death forms
         document.getElementById("Vaccineform").style.display = "none";
         document.getElementById("DeathForm").style.display = "none";
       }

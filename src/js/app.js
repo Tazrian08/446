@@ -16,11 +16,11 @@ App = {
      // currently window.web3.currentProvider is deprecated for known security issues.
      // Therefore it is recommended to use window.ethereum instance instead
      App.webProvider = provider;
+     document.title = "Patient Management System";
    }
    else{
      $("#loader-msg").html('No metamask ethereum provider found')
      console.log('No Ethereum provider')
-     // specify default instance if no web3 instance provided
      App.webProvider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
    }
 
@@ -35,7 +35,6 @@ initContract: function() {
    $.getJSON("PatientManagement.json", function( PatientManagement ){
      // instantiate a new truffle contract from the artifict
      App.contracts.PatientManagement = TruffleContract( PatientManagement );
-
 
      // connect provider to interact with contract
      App.contracts.PatientManagement.setProvider( App.webProvider );
@@ -61,16 +60,14 @@ render: async function(){
    loader.show();
    content.hide();
   
-   // load account data
    if (window.ethereum) {
      try {
-       // recommended approach to requesting user to connect mmetamask instead of directly getting the accounts
+       
        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
        App.account = accounts;
        $("#accountAddress").html("Your Account: " + App.account);
      } catch (error) {
        if (error.code === 4001) {
-         // User rejected request
          console.warn('user rejected')
        }
        $("#accountAddress").html("Your Account: Not Connected");
@@ -79,7 +76,6 @@ render: async function(){
    }
 
 
-   //load contract ddata
    App.contracts.PatientManagement.deployed()
    .then( function( instance ){
      PatientManagementInstance = instance;
@@ -101,24 +97,24 @@ render: async function(){
     //           console.log(admin);
     //       })}
 
-    for (let i = 1; i <= patientsCount; i++) {
-      PatientManagementInstance.admins(i)
-          .then(function(admin) {
-              console.log(admin);
-              if (admin == true){
-                var admin = "Admin"
-              } else{
-                var admin = "General"
-              };
-          })}
+    // for (let i = 1; i <= patientsCount; i++) {
+    //   PatientManagementInstance.admins(i)
+    //       .then(function(admin) {
+    //           console.log(admin);
+    //           if (admin == true){
+    //             var admin = "Admin"
+    //           } else{
+    //             var admin = "General"
+    //           };
+    //       })}
 
 
- // Define the showAlert function
+ 
 function showAlert() {
   alert("Vaccine Certificate Downloaded!");
 }
 
-// Loop through patients
+
 for (let i = 1; i <= patientsCount; i++) {
   PatientManagementInstance.patients(i)
       .then(function(patient) {
@@ -129,34 +125,20 @@ for (let i = 1; i <= patientsCount; i++) {
           var vaccine_status = patient[4];
           var death = patient[7];
           var district = patient[5];
-          var isDoubleDosed = patient[8]; // Assuming this indicates whether the patient is double dosed or not
-          
-          // Check if the patient is double dosed
+          var isDoubleDosed = patient[8]; 
           var btn = "none";
           if (isDoubleDosed == true) {
               btn = "<button class='btn btn-primary' data-id='" + id + "'>Certificate</button>";
           }
 
-          // Create a button element
+          
           var button = $(btn);
 
-          // Attach click event listener to the button
           button.on('click', function() {
               showAlert();
           });
 
-          // for (let i = 1; i <= patientsCount; i++) {
-          //   PatientManagementInstance.admins(i)
-          //       .then(function(admin) {
-          //           console.log(admin);
-          //           if (admin == true){
-          //             var admin = "Admin"
-          //           } else{
-          //             var admin = "General"
-          //           };
-          //       })}
           
-          // Create table row and append it to the table body
           var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age + "</td><td>" + district + "</td><td>" + vaccine_status + "</td><td>" + death + "</td><td></td></tr>";
           var tableRow = $(patientTemplate);
           tableRow.find('td').last().append(button);
@@ -176,7 +158,6 @@ for (let i = 1; i <= patientsCount; i++) {
      
    })
    .then( function( isAdmin ){
-     // don't allow user to vote
      if(isAdmin){
      $( "#Adminform" ).hide()
      $( "#addPatientform" ).hide()
@@ -206,7 +187,7 @@ for (let i = 1; i <= patientsCount; i++) {
     
     
 
-// Fetch district death counts
+
 App.contracts.PatientManagement.deployed()
 .then(function(instance) {
     return instance.getDistrictDeathCounts();
@@ -270,13 +251,10 @@ App.contracts.PatientManagement.deployed()
     return instance.addPatient(name, age, gender, vaccineStatus, district, symptoms, isDead, { from: App.account[0] });
   })
   .then(function(result) {
-    // Success, do something
     console.log("Patient added successfully:", result);
     App.render()
-    // Optionally, you can update the UI to reflect the addition of the patient
   })
   .catch(function(error) {
-    // Handle errors
     console.error("Error adding patient:", error);
   });
   
@@ -319,7 +297,7 @@ updateDeath: function() {
 },
 
 
- // voted event
+
  listenForEvents: function(){
    App.contracts.PatientManagement.deployed()
    .then( function( instance ){
@@ -329,7 +307,6 @@ updateDeath: function() {
      })
      .watch( function( err, event ){
        console.log("Triggered", event);
-       // reload page
        App.render()
      })
    })
@@ -338,19 +315,15 @@ updateDeath: function() {
 listenForEvents: function() {
    App.contracts.PatientManagement.deployed()
    .then(function(instance) {
-       // Get the contract instance
        const contractInstance = instance;
 
-       // Subscribe to the PatientAdded event
        contractInstance.PatientAdded({}, function(error, event) {
            if (error) {
                console.error("Error listening for PatientAdded event:", error);
                return;
            }
            console.log("Patient Added:", event.returnValues);
-           // Optionally, you can update the UI to reflect the addition of the patient
-           // For example, you can append the new patient details to a table
-           // or display a notification to the user
+          
        });
    })
    .catch(function(error) {
