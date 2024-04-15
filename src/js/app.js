@@ -55,6 +55,7 @@ render: async function(){
    let PatientManagementInstance;
    const loader = $("#loader");
    const content = $("#content");
+   
 
 
    loader.show();
@@ -161,9 +162,12 @@ for (let i = 1; i <= patientsCount; i++) {
      if(isAdmin){
      $( "#Adminform" ).hide()
      $( "#addPatientform" ).hide()
+     $( "#update-msg" ).show()
+     $( "#reg-msg" ).hide()
      }else{
       $("#Vaccineform").hide()
       $("#DeathForm").hide()
+      $( "#update" ).hide()
      }
      loader.hide();
      content.show();

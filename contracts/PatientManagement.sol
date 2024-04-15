@@ -143,7 +143,7 @@ struct DistrictStats {
         emit PatientAdded(patientsCount, _name, _age, _gender, _vaccine_status, _district, _symptoms_details, _is_dead);
     }
 
-   // compare two strings
+   // Function to compare two strings
     function compareStrings(string memory a, string memory b) internal pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
@@ -227,7 +227,7 @@ struct DistrictStats {
         }
     }
 
-    function getCovidTrend() public view returns (uint, string[] memory, uint, uint, uint, uint, uint) {
+    function getCovidTrend() public view returns (uint, string memory, uint, uint, uint, uint, uint) {
     uint totalDeaths;
     uint medianAge;
     uint childPercent;
@@ -237,27 +237,24 @@ struct DistrictStats {
 
     // district with highest death count
     uint highestDeathCount = 0;
-    string[] memory districtsWithHighestDeathCount = new string[](districts.length);
-    uint count = 0;
+    string memory concatenatedDistricts;
     for (uint j = 0; j < districts.length; j++) {
         uint deathCount = districtDeathCounts[districts[j]];
         if (deathCount > highestDeathCount) {
             highestDeathCount = deathCount;
-            count = 1;
-            districtsWithHighestDeathCount[0] = districts[j];
+            concatenatedDistricts = districts[j];
         } else if (deathCount == highestDeathCount) {
-            districtsWithHighestDeathCount[count] = districts[j];
-            count++;
+            concatenatedDistricts = string(abi.encodePacked(concatenatedDistricts, " ", districts[j]));
         }
     }
-
 
     totalDeaths = calculateTotalDeaths();
     medianAge = calculateMedianAge();
     (childPercent, teenPercent, youthPercent, elderPercent) = calculateAgeGroupPercentages();
 
-    return (totalDeaths, districtsWithHighestDeathCount, medianAge, childPercent, teenPercent, youthPercent, elderPercent);
+    return (totalDeaths, concatenatedDistricts, medianAge, childPercent, teenPercent, youthPercent, elderPercent);
 }
+
 
 function calculateTotalDeaths() internal view returns (uint) {
     uint deaths;
@@ -268,18 +265,6 @@ function calculateTotalDeaths() internal view returns (uint) {
     }
     return deaths;
 }
-
-function calculateMedianAge() internal view returns (uint) {
-    uint[] memory ages = new uint[](patientsCount);
-    for (uint k = 1; k <= patientsCount; k++) {
-        ages[k - 1] = patients[k].age;
-    }
-    return calculateMedian(ages);
-}
-
-
-
-
 
 function calculateAgeGroupPercentages() internal view returns (uint, uint, uint, uint) {
     uint childCount;
@@ -310,6 +295,13 @@ function calculateAgeGroupPercentages() internal view returns (uint, uint, uint,
     return (childPercent, teenPercent, youthPercent, elderPercent);
 }
 
+function calculateMedianAge() internal view returns (uint) {
+    uint[] memory ages = new uint[](patientsCount);
+    for (uint k = 1; k <= patientsCount; k++) {
+        ages[k - 1] = patients[k].age;
+    }
+    return calculateMedian(ages);
+}
 //calculate median
 function calculateMedian(uint[] memory values) internal pure returns (uint) {
     uint n = values.length;
