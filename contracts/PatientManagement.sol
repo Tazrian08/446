@@ -227,43 +227,57 @@ struct DistrictStats {
         }
     }
 
-    function getCovidTrend() public view returns (uint, string memory, uint, uint, uint, uint, uint) {
+    function getCovidTrend() public view returns (uint, string[] memory, uint, uint, uint, uint, uint) {
     uint totalDeaths;
     uint medianAge;
     uint childPercent;
     uint teenPercent;
     uint youthPercent;
     uint elderPercent;
-    string memory districtWithHighestDeathCount;
-
-    // total deaths
-    for (uint i = 1; i <= patientsCount; i++) {
-        if (patients[i].is_dead) {
-            totalDeaths++;
-        }
-    }
 
     // district with highest death count
     uint highestDeathCount = 0;
+    string[] memory districtsWithHighestDeathCount = new string[](districts.length);
+    uint count = 0;
     for (uint j = 0; j < districts.length; j++) {
         uint deathCount = districtDeathCounts[districts[j]];
         if (deathCount > highestDeathCount) {
             highestDeathCount = deathCount;
-            districtWithHighestDeathCount = districts[j];
+            count = 1;
+            districtsWithHighestDeathCount[0] = districts[j];
+        } else if (deathCount == highestDeathCount) {
+            districtsWithHighestDeathCount[count] = districts[j];
+            count++;
         }
     }
 
-    // Calculate median age
+
+    totalDeaths = calculateTotalDeaths();
+    medianAge = calculateMedianAge();
+    (childPercent, teenPercent, youthPercent, elderPercent) = calculateAgeGroupPercentages();
+
+    return (totalDeaths, districtsWithHighestDeathCount, medianAge, childPercent, teenPercent, youthPercent, elderPercent);
+}
+
+function calculateTotalDeaths() internal view returns (uint) {
+    uint deaths;
+    for (uint i = 1; i <= patientsCount; i++) {
+        if (patients[i].is_dead) {
+            deaths++;
+        }
+    }
+    return deaths;
+}
+
+function calculateMedianAge() internal view returns (uint) {
     uint[] memory ages = new uint[](patientsCount);
     for (uint k = 1; k <= patientsCount; k++) {
         ages[k - 1] = patients[k].age;
     }
-    medianAge = calculateMedian(ages);
-
-    (childPercent, teenPercent, youthPercent, elderPercent) = calculateAgeGroupPercentages();
-
-    return (totalDeaths, districtWithHighestDeathCount, medianAge, childPercent, teenPercent, youthPercent, elderPercent);
+    return calculateMedian(ages);
 }
+
+
 
 
 
