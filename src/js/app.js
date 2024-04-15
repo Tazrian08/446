@@ -95,7 +95,22 @@ render: async function(){
      var patientsSelect = $("#patientsSelect");
      patientsSelect.empty();
 
-     
+    //  for (let i = 1; i <= patientsCount; i++) {
+    //   PatientManagementInstance.admins(i)
+    //       .then(function(admin) {
+    //           console.log(admin);
+    //       })}
+
+    for (let i = 1; i <= patientsCount; i++) {
+      PatientManagementInstance.admins(i)
+          .then(function(admin) {
+              console.log(admin);
+              if (admin == true){
+                var admin = "Admin"
+              } else{
+                var admin = "General"
+              };
+          })}
 
 
  // Define the showAlert function
@@ -115,9 +130,9 @@ for (let i = 1; i <= patientsCount; i++) {
           var death = patient[7];
           var district = patient[5];
           var isDoubleDosed = patient[8]; // Assuming this indicates whether the patient is double dosed or not
-
+          
           // Check if the patient is double dosed
-          var btn = "";
+          var btn = "none";
           if (isDoubleDosed == true) {
               btn = "<button class='btn btn-primary' data-id='" + id + "'>Certificate</button>";
           }
@@ -130,6 +145,17 @@ for (let i = 1; i <= patientsCount; i++) {
               showAlert();
           });
 
+          // for (let i = 1; i <= patientsCount; i++) {
+          //   PatientManagementInstance.admins(i)
+          //       .then(function(admin) {
+          //           console.log(admin);
+          //           if (admin == true){
+          //             var admin = "Admin"
+          //           } else{
+          //             var admin = "General"
+          //           };
+          //       })}
+          
           // Create table row and append it to the table body
           var patientTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + age + "</td><td>" + district + "</td><td>" + vaccine_status + "</td><td>" + death + "</td><td></td></tr>";
           var tableRow = $(patientTemplate);
@@ -146,12 +172,17 @@ for (let i = 1; i <= patientsCount; i++) {
        });
      }
      return PatientManagementInstance.admins(  App.account )
+
+     
    })
    .then( function( isAdmin ){
      // don't allow user to vote
      if(isAdmin){
      $( "#Adminform" ).hide()
      $( "#addPatientform" ).hide()
+     }else{
+      $("#Vaccineform").hide()
+      $("#DeathForm").hide()
      }
      loader.hide();
      content.show();
@@ -180,25 +211,25 @@ App.contracts.PatientManagement.deployed()
 .then(function(instance) {
     return instance.getDistrictDeathCounts();
 })
-.then(function(result) {
-    // Extract district names and death counts from the result
-    console.log(result);
+// .then(function(result) {
+//     // Extract district names and death counts from the result
+//     console.log(result);
    
-    var districts = result[0];
-    var deathCounts = result[1];
-    console.log(districts );
-    console.log(deathCounts);
-    // Update the UI with the district names and death counts
-    var districtsList = document.getElementById("districtsList");
-    for (var i = 0; i < districts.length; i++) {
-        var listItem = document.createElement("li");
-        listItem.textContent = districts[i] + ": " + deathCounts[i];
-        districtsList.appendChild(listItem);
-    }
-})
-.catch(function(error) {
-    console.error("Error fetching district death counts:", error);
-});
+//     var districts = result[0];
+//     var deathCounts = result[1];
+//     console.log(districts );
+//     console.log(deathCounts);
+//     // Update the UI with the district names and death counts
+//     var districtsList = document.getElementById("districtsList");
+//     for (var i = 0; i < districts.length; i++) {
+//         var listItem = document.createElement("li");
+//         listItem.textContent = districts[i] + ": " + deathCounts[i];
+//         districtsList.appendChild(listItem);
+//     }
+// })
+// .catch(function(error) {
+//     console.error("Error fetching district death counts:", error);
+// });
 
 
   

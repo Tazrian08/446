@@ -23,7 +23,7 @@
    <div class="container" style="width: 650px;">
      <div class="row">
          <div class="col-lg-12">
-             <h1 class="text-center">Patient List</h1>
+             <h1 class="text-center">Patient & Admin List</h1>
              <hr />
              <br />
              <div id="loader">
@@ -39,6 +39,7 @@
                              <th scope="col">District</th>
                              <th scope="col">Vaccine Status</th>
                              <th scope="col">Death Status</th>
+                             <!-- <th scope="col">Category</th> -->
                              <th scope="col">Action</th>
 
                          </tr>
@@ -51,6 +52,7 @@
                                 <td>" + district + "</td>
                                 <td>" + vaccine_status + "</td>
                                 <td>" + death + "</td>
+                                <!-- <td>" + admin + "</td> -->
                                 <td><button class='btn btn-primary'>Button Text</button></td>
                             </tr>
                         </tbody>
@@ -115,7 +117,7 @@
       <option value="false">No</option>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">Add Patient</button>
+  <button type="submit" class="btn btn-primary">Add User</button>
   <hr />
 </form>
 
@@ -196,5 +198,19 @@
    <script src="js/web3.min.js"></script>
    <script src="js/truffle-contract.js"></script>
    <script src="js/app.js"></script>
+
+   <!-- <script>
+    // Wait for the DOM to be fully loaded before executing the script
+    document.addEventListener("DOMContentLoaded", function() {
+      // Check if the user is an admin
+      if (!isAdmin) {
+        // Hide the update vaccine and death forms
+        document.getElementById("Vaccineform").style.display = "none";
+        document.getElementById("DeathForm").style.display = "none";
+      }
+    });
+  </script> -->
+  
+  
  </body>
 </html>
